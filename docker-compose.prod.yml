@@ -3,7 +3,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: medusa-server-default
     depends_on:
       - postgres
@@ -11,15 +11,11 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/medusa-docker
       REDIS_URL: redis://redis
-      NODE_ENV: production
-      JWT_SECRET: something
-      COOKIE_SECRET: something
       PORT: 8080
     ports:
       - "8080:8080"
     volumes:
-      - ./develop.sh:/app/develop.sh
-      - .:/app
+      - ./deploy.sh:/app/deploy.sh
 
   postgres:
     image: postgres:14-alpine
@@ -35,6 +31,10 @@ services:
     image: redis
     expose:
       - 6379
-
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+     - "8081:8080"
 volumes:
   pg-data:

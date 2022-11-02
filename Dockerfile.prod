@@ -1,0 +1,16 @@
+FROM node:lts-slim as base
+WORKDIR /app
+
+FROM base as builder
+RUN apt update -y && apt install git curl -y
+RUN     curl -sf https://gobinaries.com/tj/node-prune | sh
+COPY package.json .yarnrc medusa-config.js tsconfig.json deploy.sh .env* .babelrc.js ./
+COPY src/ ./src/
+COPY data/ ./data/
+RUN npm install && npm run build && npm prune --omit=dev
+RUN node-prune 
+
+FROM base as runner
+ENV NODE_ENV production
+COPY --from=builder /app ./
+ENTRYPOINT ["./deploy.sh"]
