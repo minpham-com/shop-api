@@ -1,0 +1,11 @@
+node_modules
+yarn.lock
+package-lock.json
+README.md
+medusa-db.sql
+prod.sh
+Dockerfile.prod
+docker-compose.prod.yml
+.gitignore
+.dockerignore
+.github

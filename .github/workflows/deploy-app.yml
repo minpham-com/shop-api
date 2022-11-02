@@ -1,0 +1,141 @@
+name: Deploy develop
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [develop]
+
+jobs:
+  build:
+    name: Publish container registry ...
+    runs-on: ubuntu-latest
+    environment: develop
+    env:
+      #GS_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      #GS_PROJECT_REGION: ${{ secrets.GCP_PROJECT_REGION }}
+      #GS_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      DCR_IMAGE_NAME: ${{ secrets.HUB_DOCKER_USER_NAME }}/${{ github.event.repository.name }}-${{ secrets.PREFIX }}
+      GHCR_IMAGE_NAME: ghcr.io/${{ github.repository }}-${{ secrets.PREFIX }}
+      #GCR_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/api-${{ secrets.PREFIX }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-mode-modules-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-mode-modules-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to ghcr.io registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      # uncomment if use gcr registry and add tag to build and push action
+      #- name: Login to gcr.io registry
+      #  uses: docker/login-action@v2
+      #  with:
+      #    registry: gcr.io
+      #    username: _json_key
+      #    password: ${{ env.GS_CREDENTIALS }}
+      # ${{ env.GCR_IMAGE_NAME }}:${{ github.sha }}
+      # ${{ env.GCR_IMAGE_NAME }}:latest
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.HUB_DOCKER_USER_NAME }}
+          password: ${{ secrets.HUB_DOCKER_PASSWORD }}
+
+      
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          push: true
+          tags: |
+            ${{ env.GHCR_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.GHCR_IMAGE_NAME }}:latest
+            ${{ env.DCR_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.DCR_IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  migrate:
+    name: Migrate develop environment
+    runs-on: ubuntu-latest
+    environment: develop
+    needs: build
+    env:
+      PREFIX: ${{ secrets.PREFIX }}
+      GS_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GS_PROJECT_REGION: ${{ secrets.GCP_PROJECT_REGION }}
+      GS_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Cloud auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ env.GS_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          install_components: 'beta'
+
+      - name: Run migrate database
+        run: |
+          gcloud run jobs execute migrate-${{ env.PREFIX }} --quiet --region $GS_PROJECT_REGION
+
+  deploy:
+    name: Deploy develop environment
+    runs-on: ubuntu-latest
+    environment: develop
+    needs: migrate
+    env:
+      PREFIX: ${{ secrets.PREFIX }}
+      GS_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GS_PROJECT_REGION: ${{ secrets.GCP_PROJECT_REGION }}
+      GS_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      DCR_IMAGE_NAME: ${{ secrets.HUB_DOCKER_USER_NAME }}/${{ github.event.repository.name }}-${{ secrets.PREFIX }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Cloud auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ env.GS_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          install_components: 'beta'
+
+      - name: Deploy cloud run
+        run: |-
+          gcloud run deploy ${{ env.GS_PROJECT_ID }}-api-${{ env.PREFIX }} \
+            --platform=managed \
+            --binary-authorization=default \
+            --allow-unauthenticated \
+            --image $DCR_IMAGE_NAME:latest \
+            --region $GS_PROJECT_REGION \
+            --command node \
+            --args index.js

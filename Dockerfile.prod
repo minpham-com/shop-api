@@ -1,0 +1,17 @@
+FROM node:lts-alpine as base
+RUN npm i -g npm@latest
+WORKDIR /app
+
+FROM base as builder
+RUN apk add git curl
+RUN curl -sf https://gobinaries.com/tj/node-prune | sh
+COPY package.json medusa-config.js tsconfig.json entrypoint.sh .env* .babelrc.js helper.js index.js ./
+COPY src/ ./src/
+COPY data/ ./data/
+RUN npm install && npm run build && npm prune --omit=dev
+RUN node-prune 
+
+FROM base as runner
+ENV NODE_ENV production
+COPY --from=builder /app ./
+ENTRYPOINT ["./entrypoint.sh"]

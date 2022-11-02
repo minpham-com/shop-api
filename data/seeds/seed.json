@@ -1,21 +1,24 @@
 {
   "store": {
-    "currencies": [
-      "eur",
-      "usd"
-    ]
+    "currencies": ["vnd", "usd"]
   },
   "users": [
     {
-      "email": "admin@medusa-test.com",
-      "password": "supersecret"
+      "email": "admin@minpham.com",
+      "password": "supersecret",
+      "role": "admin"
+    },
+    {
+      "email": "member@minpham.com",
+      "password": "supersecret",
+      "role": "member"
     }
   ],
   "regions": [
     {
-      "id": "test-region-eu",
-      "name": "EU",
-      "currency_code": "eur",
+      "id": "region-vn",
+      "name": "VN",
+      "currency_code": "vnd",
       "tax_rate": 0,
       "payment_providers": [
         "manual"
@@ -30,7 +33,8 @@
         "se",
         "fr",
         "es",
-        "it"
+        "it",
+        "vn"
       ]
     },
     {
@@ -52,8 +56,8 @@
   ],
   "shipping_options": [
     {
-      "name": "PostFake Standard",
-      "region_id": "test-region-eu",
+      "name": "J&T express",
+      "region_id": "region-vn",
       "provider_id": "manual",
       "data": {
         "id": "manual-fulfillment"
@@ -62,71 +66,8 @@
       "amount": 1000
     },
     {
-      "name": "PostFake Express",
-      "region_id": "test-region-eu",
-      "provider_id": "manual",
-      "data": {
-        "id": "manual-fulfillment"
-      },
-      "price_type": "flat_rate",
-      "amount": 1500
-    },
-    {
-      "name": "PostFake Return",
-      "region_id": "test-region-eu",
-      "provider_id": "manual",
-      "data": {
-        "id": "manual-fulfillment"
-      },
-      "price_type": "flat_rate",
-      "is_return": true,
-      "amount": 1000
-    },
-    {
       "name": "I want to return it myself",
-      "region_id": "test-region-eu",
-      "provider_id": "manual",
-      "data": {
-        "id": "manual-fulfillment"
-      },
-      "price_type": "flat_rate",
-      "is_return": true,
-      "amount": 0
-    },
-    {
-      "name": "FakeEx Standard",
-      "region_id": "test-region-na",
-      "provider_id": "manual",
-      "data": {
-        "id": "manual-fulfillment"
-      },
-      "price_type": "flat_rate",
-      "amount": 800
-    },
-    {
-      "name": "FakeEx Express",
-      "region_id": "test-region-na",
-      "provider_id": "manual",
-      "data": {
-        "id": "manual-fulfillment"
-      },
-      "price_type": "flat_rate",
-      "amount": 1200
-    },
-    {
-      "name": "FakeEx Return",
-      "region_id": "test-region-na",
-      "provider_id": "manual",
-      "data": {
-        "id": "manual-fulfillment"
-      },
-      "price_type": "flat_rate",
-      "is_return": true,
-      "amount": 800
-    },
-    {
-      "name": "I want to return it myself",
-      "region_id": "test-region-na",
+      "region_id": "region-vn",
       "provider_id": "manual",
       "data": {
         "id": "manual-fulfillment"
@@ -138,7 +79,7 @@
   ],
   "products": [
     {
-      "title": "Medusa T-Shirt",
+      "title": "T-Shirt",
       "categories": [
         {
           "id": "pcat_shirts"
@@ -178,7 +119,7 @@
           "title": "S / Black",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -201,7 +142,7 @@
           "title": "S / White",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -224,7 +165,7 @@
           "title": "M / Black",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -247,7 +188,7 @@
           "title": "M / White",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -270,7 +211,7 @@
           "title": "L / Black",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -293,7 +234,7 @@
           "title": "L / White",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -316,7 +257,7 @@
           "title": "XL / Black",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -339,7 +280,7 @@
           "title": "XL / White",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1950
             },
             {
@@ -361,7 +302,7 @@
       ]
     },
     {
-      "title": "Medusa Sweatshirt",
+      "title": "Sweatshirt",
       "categories": [
         {
           "id": "pcat_shirts"
@@ -392,7 +333,7 @@
           "title": "S",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -412,7 +353,7 @@
           "title": "M",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -432,7 +373,7 @@
           "title": "L",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -452,7 +393,7 @@
           "title": "XL",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -471,7 +412,7 @@
       ]
     },
     {
-      "title": "Medusa Sweatpants",
+      "title": "Sweatpants",
       "categories": [
         {
           "id": "pcat_pants"
@@ -502,7 +443,7 @@
           "title": "S",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -522,7 +463,7 @@
           "title": "M",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -542,7 +483,7 @@
           "title": "L",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -562,7 +503,7 @@
           "title": "XL",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2950
             },
             {
@@ -581,7 +522,7 @@
       ]
     },
     {
-      "title": "Medusa Shorts",
+      "title": "Shorts",
       "categories": [
         {
           "id": "pcat_merch"
@@ -612,7 +553,7 @@
           "title": "S",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2500
             },
             {
@@ -632,7 +573,7 @@
           "title": "M",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2500
             },
             {
@@ -652,7 +593,7 @@
           "title": "L",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2500
             },
             {
@@ -672,7 +613,7 @@
           "title": "XL",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 2500
             },
             {
@@ -691,7 +632,7 @@
       ]
     },
     {
-      "title": "Medusa Hoodie",
+      "title": "Hoodie",
       "categories": [
         {
           "id": "pcat_merch"
@@ -725,7 +666,7 @@
           "title": "S",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -745,7 +686,7 @@
           "title": "M",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -765,7 +706,7 @@
           "title": "L",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -785,7 +726,7 @@
           "title": "XL",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -804,7 +745,7 @@
       ]
     },
     {
-      "title": "Medusa Longsleeve",
+      "title": "Longsleeve",
       "categories": [
         {
           "id": "pcat_shirts"
@@ -838,7 +779,7 @@
           "title": "S",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -858,7 +799,7 @@
           "title": "M",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -878,7 +819,7 @@
           "title": "L",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -898,7 +839,7 @@
           "title": "XL",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 3650
             },
             {
@@ -917,7 +858,7 @@
       ]
     },
     {
-      "title": "Medusa Coffee Mug",
+      "title": "Coffee Mug",
       "categories": [
         {
           "id": "pcat_merch"
@@ -947,7 +888,7 @@
           "title": "One Size",
           "prices": [
             {
-              "currency_code": "eur",
+              "currency_code": "vnd",
               "amount": 1000
             },
             {
