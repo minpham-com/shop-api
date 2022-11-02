@@ -1,0 +1,10 @@
+p Dear #{data.customer.first_name}|#{data.customer.last_name}
+br
+p Your order detail
+br
+p ID                  : <a href="#{env.CLIENT_HOST}/order/confirmed/#{data.id}">#{data.id}</a>
+p Subtotal            : #{data.subtotal}
+p Subtotal exclude tax: #{data.subtotal_ex_tax}
+p Tax                 : #{data.tax_total}
+hr
+p Total               : #{data.total}

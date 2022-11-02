@@ -1,0 +1,59 @@
+name: Deploy develop
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  deploy:
+    name: Deploy develop environment
+    runs-on: ubuntu-latest
+    environment: develop
+    env:
+      PREFIX: ${{ secrets.PREFIX }}
+      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/api-${{ secrets.PREFIX }}
+      GS_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GS_PROJECT_REGION: ${{ secrets.GCP_PROJECT_REGION }}
+      GS_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Cloud auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ env.GS_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          install_components: 'beta'
+
+      - name: Setup environment
+        run: gcloud secrets versions access latest --secret="${{ env.GS_PROJECT_ID }}-api-${{ env.PREFIX }}" --out-file=.env.production
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Build Docker image
+        run: docker build . -t $IMAGE_NAME:$GITHUB_SHA -t $IMAGE_NAME:latest -f Dockerfile.prod
+
+      - name: Push Docker image
+        run: docker push $IMAGE_NAME --all-tags
+
+      - name: Run migrate database
+        run: |
+          gcloud beta run jobs execute migrate-${{ env.PREFIX }} --quiet --region $GS_PROJECT_REGION
+
+      - name: Deploy cloud run
+        run: |-
+          gcloud run deploy ${{ env.GS_PROJECT_ID }}-api-${{ env.PREFIX }} \
+            --platform=managed \
+            --binary-authorization=default \
+            --allow-unauthenticated \
+            --image $IMAGE_NAME:latest \
+            --region $GS_PROJECT_REGION \
+            --command npm \
+            --args run \
+            --args serve

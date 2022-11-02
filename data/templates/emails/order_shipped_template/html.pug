@@ -1,0 +1,10 @@
+p Dear #{data.order.customer.first_name}|#{data.order.customer.last_name}
+br
+p Your order shipped detail
+<br>
+p ID                  : #{data.order.id}
+p Subtotal            : #{data.order.subtotal}
+p Subtotal exclude tax: #{data.order.subtotal_ex_tax}
+p Tax                 : #{data.order.tax_total}
+hr
+p Total               : #{data.order.total}
