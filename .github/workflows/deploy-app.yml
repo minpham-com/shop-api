@@ -1,14 +1,14 @@
-name: Deploy develop
+name: Deploy production
 
 on:
-  push:
-    branches: [develop]
+  release:
+    types: [published]
 
 jobs:
   deploy:
-    name: Deploy develop environment
+    name: Deploy production environment
     runs-on: ubuntu-latest
-    environment: develop
+    environment: production
     env:
       PREFIX: ${{ secrets.PREFIX }}
       IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/api-${{ secrets.PREFIX }}
