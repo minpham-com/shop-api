@@ -10125,9 +10125,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:3.7.3":
-  version: 3.7.3
-  resolution: "mongodb@npm:3.7.3"
+"mongodb@npm:3.7.4":
+  version: 3.7.4
+  resolution: "mongodb@npm:3.7.4"
   dependencies:
     bl: ^2.2.1
     bson: ^1.1.4
@@ -10151,7 +10151,7 @@ __metadata:
       optional: true
     snappy:
       optional: true
-  checksum: ef7690fe6ee7d1752f121b14e59b3fabfddc60ff0536babce6c945703ad0010de9e6fa7de4c91b99275c256876a72a06899ce27893aba0838c2b542088bd1044
+  checksum: e9b4e932f40029d2fc7b2247737f4fc6fc8951c0ac86530e19d305b58dc8a8251bb42a73af2e9da14fd606856bf240c80951fec9a870719481c0cf2d78327547
   languageName: node
   linkType: hard
 
@@ -10165,14 +10165,14 @@ __metadata:
   linkType: hard
 
 "mongoose@npm:^5.13.14":
-  version: 5.13.17
-  resolution: "mongoose@npm:5.13.17"
+  version: 5.13.20
+  resolution: "mongoose@npm:5.13.20"
   dependencies:
     "@types/bson": 1.x || 4.0.x
     "@types/mongodb": ^3.5.27
     bson: ^1.1.4
     kareem: 2.3.2
-    mongodb: 3.7.3
+    mongodb: 3.7.4
     mongoose-legacy-pluralize: 1.0.2
     mpath: 0.8.4
     mquery: 3.2.5
@@ -10182,7 +10182,7 @@ __metadata:
     safe-buffer: 5.2.1
     sift: 13.5.2
     sliced: 1.0.1
-  checksum: b6557717f6e8d34824141ccb4ee5e5011f5cb042c9e7cd0a18a21b2777cb58cc945b41feeda39614dd6806070b539bc16a85893714411b0df5ba74cc44dab072
+  checksum: 960326fc34d0d8b5c7cf9e97148e1a286aa13b1df96f51c2af83fa64d4e586625616c370ac69f8a64fc05bf3ec64ada0a5b79c85a03a29866ef5ae62d16cbde9
   languageName: node
   linkType: hard
 
